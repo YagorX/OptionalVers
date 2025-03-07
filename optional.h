@@ -27,11 +27,11 @@ public:
         obj_ = obj;
         is_initialized_ = true;
     }
-    Optional(T&& value)
+    Optional(T&& value) noexcept
     {
         //if (value == std::nullopt) return;
         T* obj = new (&data_[0]) T(std::move(value));
-        obj_ = obj;
+        std::swap(obj, obj_);
         is_initialized_ = true;
     }
 
@@ -87,7 +87,7 @@ public:
         }
         return *this;
     }
-    Optional& operator=(Optional&& rhs) {
+    Optional& operator=(Optional&& rhs) noexcept {
         if (this == &rhs) return *this;
 
         if (is_initialized_ && rhs.HasValue())
@@ -110,10 +110,18 @@ public:
     
     ~Optional()
     {
-        if (is_initialized_) {
-            obj_->~T();
-            is_initialized_ = false;
-        }
+        Destroy();
+    }
+
+
+    template <typename ... Args>
+    void Emplace(Args&& ... values)
+    {
+        if (is_initialized_) Destroy();
+
+        T* obj = new T(std::forward<Args>(values)...);
+        obj_ = obj;
+        is_initialized_ = true;
     }
 
     bool HasValue() const { return is_initialized_; }
@@ -160,6 +168,14 @@ public:
     }
 
 private:
+
+    void Destroy()
+    {
+        if (is_initialized_) {
+            obj_->~T();
+            is_initialized_ = false;
+        }
+    }
     // alignas нужен для правильного выравнивания блока памяти
     alignas(T) char data_[sizeof(T)];
     T* obj_;

@@ -1,5 +1,6 @@
 #include <optional>
 #include <iostream>
+#include <utility>
 #include "optional.h"
 #include "unit-test.h"
 
@@ -10,6 +11,7 @@ int main() {
         TestMoveAssignment();
         TestValueAccess();
         TestReset();
+        TestEmplace();
     }
     catch (...) {
         assert(false);
