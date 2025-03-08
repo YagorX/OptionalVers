@@ -3,6 +3,7 @@
 #include <utility>
 #include "optional.h"
 #include "unit-test.h"
+#include "PerRvalue.h"
 
 int main() {
     try {
@@ -12,6 +13,7 @@ int main() {
         TestValueAccess();
         TestReset();
         TestEmplace();
+        TestRvalue();
     }
     catch (...) {
         assert(false);

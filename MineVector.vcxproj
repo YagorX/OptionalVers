@@ -129,6 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="optional.h" />
+    <ClInclude Include="PerRvalue.h" />
     <ClInclude Include="unit-test.h" />
   </ItemGroup>
   <ItemGroup>
