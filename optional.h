@@ -112,7 +112,9 @@ public:
     {
         Destroy();
     }
-
+    
+   
+    
 
     template <typename ... Args>
     void Emplace(Args&& ... values)
@@ -129,35 +131,52 @@ public:
     // Операторы * и -> не должны делать никаких проверок на пустоту Optional.
     // Эти проверки остаются на совести программиста
     
-    T& operator*()
+    
+    
+    T& operator*() &
     {
         return static_cast<T&>(*obj_);
     }
-    const T& operator*() const
+    const T& operator*() const&
     {
         return static_cast<const T&>(*obj_);
     }
-    T* operator->()
+
+    T&& operator*() &&
+    {
+        return std::move(*obj_);
+    }
+
+    T* operator->() &
     {
         return static_cast<T*>(obj_);
     }
-    const T* operator->() const
+    const T* operator->() const&
     {
         return static_cast<const T*>(obj_);
     }
     
 
     // Метод Value() генерирует исключение BadOptionalAccess, если Optional пуст
-    T& Value() {
+    T& Value() &
+    {
         if (!is_initialized_) throw BadOptionalAccess{};
 
         return static_cast<T&>(*obj_);
     }
-    const T& Value() const {
+    const T& Value() const&
+    {
         if (!is_initialized_) throw BadOptionalAccess{};
 
         return static_cast<const T&>(*obj_);
     }
+    
+    T&& Value() && {
+        if (!is_initialized_) throw BadOptionalAccess{};
+
+        return std::move(*obj_);
+    }
+    
 
     void Reset()
     {

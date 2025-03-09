@@ -7,13 +7,16 @@
 
 int main() {
     try {
+        
         TestInitialization();
         TestAssignment();
         TestMoveAssignment();
         TestValueAccess();
         TestReset();
         TestEmplace();
-        TestRvalue();
+        
+        //TestRvalue();
+        TestRefQualifiedMethodOverloading();
     }
     catch (...) {
         assert(false);
